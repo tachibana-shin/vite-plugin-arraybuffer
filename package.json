@@ -1,0 +1,59 @@
+{
+  "name": "vite-plugin-arraybuffer",
+  "description": "Vite plugin for import file with ArrayBuffer or Uint8Array.",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
+  "main": "./dist/main.js",
+  "module": "./dist/main.js",
+  "types": "./dist/main.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/main.d.ts",
+      "import": "./dist/main.js",
+      "require": "./dist/main.cjs"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts"
+    }
+  },
+  "typesVersions": {
+    "*": {
+      "types": [
+        "dist/types.d.ts"
+      ]
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "format": "prettier -w",
+    "typing": "tsc --noEmit",
+    "build": "tsup && cp src/types.d.ts dist/",
+    "test": "vitest --run",
+    "prepublish": "pnpm test && pnpm build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.1.4",
+    "tsup": "^6.7.0",
+    "typescript": "^4.9.4",
+    "vite": "^4.0.4"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/tachibana-shin/vite-plugin-arraybuffer.git"
+  },
+  "homepage": "https://tachibana-shin.github.io/vite-plugin-arraybuffer",
+  "keywords": [
+    "vite-plugin-arraybuffer",
+    "Tachibana Shin",
+    "vite",
+    "arraybuffer",
+    "import file",
+    "tachibana-shin"
+  ]
+}
