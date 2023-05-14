@@ -34,10 +34,11 @@
     "typing": "tsc --noEmit",
     "build": "tsup && cp src/types.d.ts dist/",
     "test": "vitest --run",
-    "prepublish": "pnpm test && pnpm build"
+    "prepublish": "pnpm test && pnpm build && bumpp"
   },
   "devDependencies": {
     "@types/node": "^20.1.4",
+    "bumpp": "^9.1.0",
     "tsup": "^6.7.0",
     "typescript": "^4.9.4",
     "vite": "^4.0.4"
