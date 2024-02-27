@@ -34,7 +34,7 @@ export default function vitePluginArraybuffer(): PluginOption {
 
         return `export default new Uint8Array(
           Buffer.from("${b64}", "base64")
-        )`;
+        )`
       }
 
       return;
