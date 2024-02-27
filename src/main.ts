@@ -21,9 +21,19 @@ export default function vitePluginArraybuffer(): PluginOption {
         const buffer = await promises.readFile(file)
         const b64 = buffer.toString("base64")
 
-        return `export default new Uint8Array(
-          Buffer.from("${b64}", "base64")
-        ).buffer`
+        return `
+          function toUint8(b64) {
+            let bin = atob(b64);
+            let len = bin.length;
+            let bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+              bytes[i] = bin.charCodeAt(i);
+            }
+            return bytes;
+          }
+          
+          export default toUint8("${b64}").buffer
+        `
       }
       if (id.endsWith("?uint8array")) {
         const file = id.slice(0, -11)
@@ -32,9 +42,19 @@ export default function vitePluginArraybuffer(): PluginOption {
         const buffer = await promises.readFile(file)
         const b64 = buffer.toString("base64")
 
-        return `export default new Uint8Array(
-          Buffer.from("${b64}", "base64")
-        )`
+        return `
+          function toUint8(b64) {
+            let bin = atob(b64);
+            let len = bin.length;
+            let bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+              bytes[i] = bin.charCodeAt(i);
+            }
+            return bytes;
+          }
+          
+          export default toUint8("${b64}")
+        `
       }
 
       return;
