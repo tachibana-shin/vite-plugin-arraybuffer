@@ -10,8 +10,8 @@ export default function vitePluginArraybuffer(): PluginOption {
       if (id.endsWith("?arraybuffer") || id.endsWith("?uint8array")) {
         return id
       }
-
-      return false
+	  
+	  return;
     },
     async transform(_src, id) {
       if (id.endsWith("?arraybuffer")) {
