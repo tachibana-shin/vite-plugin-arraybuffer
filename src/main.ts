@@ -7,7 +7,12 @@ export default function vitePluginArraybuffer(): PluginOption {
   return {
     name: "vite-plugin-arraybuffer",
     resolveId(id) {
-      if (id.endsWith("?arraybuffer") || id.endsWith("?uint8array")) {
+      if (
+        id.endsWith("?arraybuffer") ||
+        id.endsWith("?uint8array") ||
+        id.endsWith("?arraybuffer&base64") ||
+        id.endsWith("?uint8array&base64")
+      ) {
         return id
       }
 	  
@@ -15,6 +20,22 @@ export default function vitePluginArraybuffer(): PluginOption {
     },
     async transform(_src, id) {
       if (id.endsWith("?arraybuffer")) {
+        const file = id.slice(0, -12)
+        this.addWatchFile(file)
+
+        return `export default new Uint8Array([
+          ${new Uint8Array(await promises.readFile(file)).join(',')}
+        ]).buffer`;
+      }
+      if (id.endsWith("?uint8array")) {
+        const file = id.slice(0, -11)
+        this.addWatchFile(file)
+
+        return `export default new Uint8Array([
+          ${new Uint8Array(await promises.readFile(file)).join(',')}
+        ])`;
+      }
+      if (id.endsWith("?arraybuffer&base64")) {
         const file = id.slice(0, -12)
         this.addWatchFile(file)
 
@@ -35,7 +56,7 @@ export default function vitePluginArraybuffer(): PluginOption {
           export default toUint8("${b64}").buffer
         `
       }
-      if (id.endsWith("?uint8array")) {
+      if (id.endsWith("?uint8array&base64")) {
         const file = id.slice(0, -11)
         this.addWatchFile(file)
 
