@@ -17,7 +17,7 @@ const decode64Raw = `function b64ToUint6(nChr) {
     : 0
 }
 
-export default function base64ToUint8(sBase64, nBlocksSize) {
+function base64ToUint8(sBase64, nBlocksSize) {
   const sB64Enc = sBase64.replace(/[^A-Za-z0-9+/]/g, "")
   const nInLen = sB64Enc.length
   const nOutLen = nBlocksSize
@@ -44,7 +44,21 @@ export default function base64ToUint8(sBase64, nBlocksSize) {
   }
 
   return taBytes
-}`
+}
+function toUint8(b64) {
+  let bin = atob(b64)
+  let len = bin.length
+  let bytes = new Uint8Array(len)
+  for (let i = 0; i < len; i++) {
+    bytes[i] = bin.charCodeAt(i)
+  }
+  return bytes
+}
+
+const decode64 = typeof self.atob === "function" ? toUint8 : base64ToUint8
+
+export default decode64
+`
 
 export default function vitePluginArraybuffer(): PluginOption {
   return {
