@@ -55,7 +55,7 @@ function toUint8(b64) {
   return bytes
 }
 
-const decode64 = typeof self.atob === "function" ? toUint8 : base64ToUint8
+const decode64 = typeof atob === "function" ? toUint8 : base64ToUint8
 
 export default decode64
 `
