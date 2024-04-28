@@ -73,7 +73,7 @@ export default function vitePluginArraybuffer(): PluginOption {
       ) {
         return id
       }
-	  
+
       return
     },
     load(id) {
@@ -87,17 +87,19 @@ export default function vitePluginArraybuffer(): PluginOption {
         const file = id.slice(0, -12)
         this.addWatchFile(file)
 
-        return `export default new Uint8Array([
-          ${new Uint8Array(await promises.readFile(file)).join(',')}
-        ]).buffer`;
+        return {
+          code: `export default new Uint8Array([${new Uint8Array(await promises.readFile(file)).join(',')}]).buffer`,
+          map: { mappings: '' }
+        };
       }
       if (id.endsWith("?uint8array")) {
         const file = id.slice(0, -11)
         this.addWatchFile(file)
 
-        return `export default new Uint8Array([
-          ${new Uint8Array(await promises.readFile(file)).join(',')}
-        ])`;
+        return {
+          code: `export default new Uint8Array([${new Uint8Array(await promises.readFile(file)).join(',')}])`,
+          map: { mappings: '' }
+        }
       }
       if (id.endsWith("?arraybuffer&base64")) {
         const file = id.slice(0, -19)
@@ -106,7 +108,10 @@ export default function vitePluginArraybuffer(): PluginOption {
         const buffer = await promises.readFile(file)
         const b64 = buffer.toString("base64")
 
-        return `import decode64 from 'virtual:decode-64'\nexport default decode64("${b64}").buffer`
+        return {
+          code: `import decode64 from 'virtual:decode-64'\nexport default decode64("${b64}").buffer`,
+          map: { mappings: '' }
+        }
       }
       if (id.endsWith("?uint8array&base64")) {
         const file = id.slice(0, -18)
@@ -115,7 +120,10 @@ export default function vitePluginArraybuffer(): PluginOption {
         const buffer = await promises.readFile(file)
         const b64 = buffer.toString("base64")
 
-        return `import decode64 from 'virtual:decode-64'\nexport default decode64("${b64}")`
+        return {
+          code: `import decode64 from 'virtual:decode-64'\nexport default decode64("${b64}")`,
+          map: { mappings: '' }
+        }
       }
 
       return;
