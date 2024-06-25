@@ -1,7 +1,7 @@
-import { promises } from "fs";
+import { promises } from "fs"
 
 // eslint-disable-next-line n/no-extraneous-import
-import { PluginOption } from "vite";
+import { PluginOption } from "vite"
 
 const decode64Raw = `function b64ToUint6(nChr) {
   return nChr > 64 && nChr < 91
@@ -64,13 +64,7 @@ export default function vitePluginArraybuffer(): PluginOption {
   return {
     name: "vite-plugin-arraybuffer",
     resolveId(id) {
-      if (
-        id.endsWith("?arraybuffer") ||
-        id.endsWith("?uint8array") ||
-        id.endsWith("?arraybuffer&base64") ||
-        id.endsWith("?uint8array&base64") ||
-        id === "virtual:decode-64"
-      ) {
+      if (id === "virtual:decode-64") {
         return id
       }
 
@@ -88,17 +82,17 @@ export default function vitePluginArraybuffer(): PluginOption {
         this.addWatchFile(file)
 
         return {
-          code: `export default new Uint8Array([${new Uint8Array(await promises.readFile(file)).join(',')}]).buffer`,
-          map: { mappings: '' }
-        };
+          code: `export default new Uint8Array([${new Uint8Array(await promises.readFile(file)).join(",")}]).buffer`,
+          map: { mappings: "" }
+        }
       }
       if (id.endsWith("?uint8array")) {
         const file = id.slice(0, -11)
         this.addWatchFile(file)
 
         return {
-          code: `export default new Uint8Array([${new Uint8Array(await promises.readFile(file)).join(',')}])`,
-          map: { mappings: '' }
+          code: `export default new Uint8Array([${new Uint8Array(await promises.readFile(file)).join(",")}])`,
+          map: { mappings: "" }
         }
       }
       if (id.endsWith("?arraybuffer&base64")) {
@@ -110,7 +104,7 @@ export default function vitePluginArraybuffer(): PluginOption {
 
         return {
           code: `import decode64 from 'virtual:decode-64'\nexport default decode64("${b64}").buffer`,
-          map: { mappings: '' }
+          map: { mappings: "" }
         }
       }
       if (id.endsWith("?uint8array&base64")) {
@@ -122,11 +116,11 @@ export default function vitePluginArraybuffer(): PluginOption {
 
         return {
           code: `import decode64 from 'virtual:decode-64'\nexport default decode64("${b64}")`,
-          map: { mappings: '' }
+          map: { mappings: "" }
         }
       }
 
-      return;
-    },
-  };
+      return
+    }
+  }
 }
