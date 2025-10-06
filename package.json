@@ -2,7 +2,7 @@
   "name": "vite-plugin-arraybuffer",
   "description": "Vite plugin for import file with ArrayBuffer or Uint8Array.",
   "private": false,
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "files": [
     "dist",
