@@ -46,6 +46,7 @@ function base64ToUint8(sBase64, nBlocksSize) {
   return taBytes
 }
 function toUint8(b64) {
+  if (typeof Uint8Array.fromBase64 === "function") return Uint8Array.fromBase64(b64)
   let bin = atob(b64)
   let len = bin.length
   let bytes = new Uint8Array(len)
