@@ -34,15 +34,15 @@
     "typing": "tsc --noEmit",
     "build": "tsup && cp src/types.d.ts dist/",
     "test": "vitest --run",
-    "prepublish": "pnpm test && pnpm build && bumpp"
+    "prepublish": "bun run test && bun run build && bumpp"
   },
   "devDependencies": {
     "@types/node": "22.13.5",
     "bumpp": "10.0.3",
     "tsup": "8.4.0",
     "typescript": "5.7.3",
-    "vite": "6.4.1",
-    "vitest": "3.0.7"
+    "vite": "^6.4.1",
+    "vitest": "^4.0.17"
   },
   "license": "MIT",
   "repository": {

@@ -2,6 +2,10 @@
 
 Vite plugin for import file with ArrayBuffer or Uint8Array!
 
+> [!TIP]
+>
+> If you are using vite 7 or higher or rolldown-vite install version >= 0.1.2
+
 ### Install
 
 ```bash
@@ -55,3 +59,4 @@ tsconfig.json
   "include": ["src"]
 }
 ```
+
