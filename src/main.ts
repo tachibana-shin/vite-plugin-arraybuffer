@@ -1,7 +1,8 @@
+import type { PluginOption } from "vite"
 import { promises } from "fs"
 
-// eslint-disable-next-line n/no-extraneous-import
-import { PluginOption } from "vite"
+const VIRTUAL_ID = "virtual:decode-64"
+const RESOLVED_ID = "\0virtual:decode-64"
 
 const decode64Raw = `function b64ToUint6(nChr) {
   return nChr > 64 && nChr < 91
@@ -65,58 +66,57 @@ export default function vitePluginArraybuffer(): PluginOption {
   return {
     name: "vite-plugin-arraybuffer",
     resolveId(id) {
-      if (id === "virtual:decode-64") {
-        return id
+      if (id === VIRTUAL_ID) {
+        return RESOLVED_ID
       }
 
       return
     },
     load(id) {
-      if (id === "virtual:decode-64") {
-        return decode64Raw
+      if (id === RESOLVED_ID) {
+        return {
+          code: decode64Raw,
+          moduleSideEffects: false
+        }
       }
       return
     },
-    async transform(_src, id) {
-      if (id.endsWith("?arraybuffer")) {
-        const file = id.slice(0, -12)
-        this.addWatchFile(file)
+    async transform(_, id) {
+      const cleanId = id.split("?", 1)[0]
 
+      if (id.endsWith("?arraybuffer")) {
+        this.addWatchFile(cleanId)
+        const bytes = new Uint8Array(await promises.readFile(cleanId))
         return {
-          code: `export default new Uint8Array([${new Uint8Array(await promises.readFile(file)).join(",")}]).buffer`,
+          code: `export default new Uint8Array([${bytes.join(",")}]).buffer`,
           map: { mappings: "" }
         }
       }
       if (id.endsWith("?uint8array")) {
-        const file = id.slice(0, -11)
-        this.addWatchFile(file)
-
+        this.addWatchFile(cleanId)
+        const bytes = new Uint8Array(await promises.readFile(cleanId))
         return {
-          code: `export default new Uint8Array([${new Uint8Array(await promises.readFile(file)).join(",")}])`,
+          code: `export default new Uint8Array([${bytes.join(",")}])`,
           map: { mappings: "" }
         }
       }
       if (id.endsWith("?arraybuffer&base64")) {
-        const file = id.slice(0, -19)
-        this.addWatchFile(file)
-
-        const buffer = await promises.readFile(file)
+        this.addWatchFile(cleanId)
+        const buffer = await promises.readFile(cleanId)
         const b64 = buffer.toString("base64")
-
         return {
-          code: `import decode64 from 'virtual:decode-64'\nexport default decode64("${b64}").buffer`,
+          code: `import decode64 from "${VIRTUAL_ID}"
+export default decode64("${b64}").buffer`,
           map: { mappings: "" }
         }
       }
       if (id.endsWith("?uint8array&base64")) {
-        const file = id.slice(0, -18)
-        this.addWatchFile(file)
-
-        const buffer = await promises.readFile(file)
+        this.addWatchFile(cleanId)
+        const buffer = await promises.readFile(cleanId)
         const b64 = buffer.toString("base64")
-
         return {
-          code: `import decode64 from 'virtual:decode-64'\nexport default decode64("${b64}")`,
+          code: `import decode64 from "${VIRTUAL_ID}"
+export default decode64("${b64}")`,
           map: { mappings: "" }
         }
       }
