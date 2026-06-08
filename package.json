@@ -49,6 +49,9 @@
     "type": "git",
     "url": "git://github.com/tachibana-shin/vite-plugin-arraybuffer.git"
   },
+  "bugs": {
+    "url": "https://github.com/tachibana-shin/vite-plugin-arraybuffer/issues"
+  },
   "homepage": "https://tachibana-shin.github.io/vite-plugin-arraybuffer",
   "keywords": [
     "vite-plugin-arraybuffer",
